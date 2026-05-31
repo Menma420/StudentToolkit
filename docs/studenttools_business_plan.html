@@ -1,0 +1,1259 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+    padding: 12px;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid var(--color-border-tertiary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .nav button {
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+  }
+  .nav button:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .nav button.active {
+    background: var(--color-text-primary);
+    color: var(--color-background-primary);
+    border-color: var(--color-text-primary);
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 20px 0 8px;
+  }
+  h4 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+    margin-bottom: 20px;
+  }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .metric-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 14px 16px;
+  }
+  .metric-label { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 4px; }
+  .metric-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .metric-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--border-radius-md);
+    font-weight: 500;
+  }
+  .badge-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-red { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .badge-blue { background: var(--color-background-info); color: var(--color-text-info); }
+  .badge-gray { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 8px 10px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-secondary);
+  }
+  td {
+    padding: 9px 10px;
+    color: var(--color-text-secondary);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--color-background-secondary); }
+
+  .priority-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--color-border-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--color-text-primary);
+  }
+  .bar-fill.high { background: #1D9E75; }
+  .bar-fill.med { background: #BA7517; }
+  .bar-fill.low { background: #888780; }
+
+  .tool-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tool-row:last-child { border-bottom: none; }
+  .tool-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tool-desc { font-size: 12px; color: var(--color-text-tertiary); }
+
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 0.5px; background: var(--color-border-secondary); }
+  .timeline-item { position: relative; margin-bottom: 20px; }
+  .timeline-dot { position: absolute; left: -22px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-text-primary); border: 2px solid var(--color-background-primary); }
+  .timeline-dot.done { background: #1D9E75; }
+  .timeline-dot.current { background: #BA7517; }
+  .timeline-label { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+  .timeline-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .timeline-body { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+
+  .list-items { list-style: none; }
+  .list-items li { padding: 6px 0; font-size: 13px; color: var(--color-text-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+  .list-items li:last-child { border-bottom: none; }
+  .list-items li::before { content: '—'; color: var(--color-text-tertiary); flex-shrink: 0; margin-top: 1px; }
+
+  .kw-row { display: grid; grid-template-columns: 2fr 80px 80px 80px; gap: 8px; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+  .kw-row:last-child { border-bottom: none; }
+  .kw-head { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  .kw-name { font-weight: 500; color: var(--color-text-primary); }
+  .kw-meta { color: var(--color-text-tertiary); text-align: center; }
+
+  .code-block {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 12px;
+    white-space: pre;
+  }
+
+  .revenue-row { display: grid; grid-template-columns: 120px 1fr 100px 100px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+  .revenue-row:last-child { border-bottom: none; }
+
+  .risk-card { border-left: 3px solid; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 12px 14px; margin-bottom: 10px; background: var(--color-background-secondary); }
+  .risk-high { border-color: #A32D2D; }
+  .risk-med { border-color: #854F0B; }
+  .risk-low { border-color: #0F6E56; }
+  .risk-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .risk-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+
+  .final-tool { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .final-tool-num { font-size: 22px; font-weight: 500; color: var(--color-text-tertiary); flex-shrink: 0; line-height: 1; }
+  .final-tool-info { flex: 1; }
+  .final-tool-name { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+  .final-tool-reason { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .final-tool-badges { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+
+  .search-box { width: 100%; padding: 8px 12px; font-size: 13px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); font-family: var(--font-sans); margin-bottom: 14px; }
+  .search-box:focus { outline: none; border-color: var(--color-border-primary); }
+  #tool-count { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 10px; }
+  .tool-cat-header { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 0 4px; }
+  .tool-item { display: grid; grid-template-columns: 1fr 60px 70px 50px; gap: 8px; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+  .tool-item:last-child { border-bottom: none; }
+  .tool-item-name { font-weight: 500; color: var(--color-text-primary); font-size: 13px; }
+  .tool-item-desc { font-size: 11px; color: var(--color-text-tertiary); grid-column: 1; }
+  .tool-item-center { text-align: center; color: var(--color-text-secondary); }
+
+  .arch-section { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px; margin-bottom: 12px; }
+  .infobox { background: var(--color-background-info); border: 0.5px solid var(--color-border-info); border-radius: var(--border-radius-md); padding: 12px 14px; margin-bottom: 12px; }
+  .infobox p { color: var(--color-text-info); margin: 0; font-size: 13px; }
+</style>
+
+<div class="nav" id="navBar">
+  <button class="active" onclick="showSection('market')">1. Market</button>
+  <button onclick="showSection('competition')">2. Competition</button>
+  <button onclick="showSection('seo')">3. SEO</button>
+  <button onclick="showSection('mvp')">4. MVP</button>
+  <button onclick="showSection('roadmap')">5. Roadmap</button>
+  <button onclick="showSection('architecture')">6. Architecture</button>
+  <button onclick="showSection('tech')">7. Tech</button>
+  <button onclick="showSection('adsense')">8. AdSense</button>
+  <button onclick="showSection('growth')">9. Growth</button>
+  <button onclick="showSection('revenue')">10. Revenue</button>
+  <button onclick="showSection('risks')">11. Risks</button>
+  <button onclick="showSection('final')">12. Final ✦</button>
+</div>
+
+<!-- SECTION 1: MARKET -->
+<div class="section active" id="section-market">
+  <h2>1. Market Analysis</h2>
+  <p class="subtitle">Why student utility websites work — and why now is the right time to build one.</p>
+
+  <div class="card-grid">
+    <div class="metric-card">
+      <div class="metric-label">India college students</div>
+      <div class="metric-value">43M+</div>
+      <div class="metric-sub">enrolled in higher education</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Engineering students (India)</div>
+      <div class="metric-value">6.5M+</div>
+      <div class="metric-sub">in B.Tech/B.E. programs</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">CAT aspirants/year</div>
+      <div class="metric-value">~350K</div>
+      <div class="metric-sub">registered candidates</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">GATE aspirants/year</div>
+      <div class="metric-value">~900K</div>
+      <div class="metric-sub">registered candidates</div>
+    </div>
+  </div>
+
+  <h3>Why students use utility websites</h3>
+  <p>Students face recurring, high-stress calculations — CGPA, attendance percentages, exam cutoffs, EMI for education loans — that have no obvious built-in tool. Search is the natural first step. These aren't one-time searches; they repeat every semester, every placement season, every exam cycle.</p>
+
+  <div class="card">
+    <h4>Primary search intents</h4>
+    <ul class="list-items">
+      <li><strong>Transactional calculators:</strong> "Calculate my CGPA", "how many classes can I miss" — immediate tool need, very high CTR to utility pages</li>
+      <li><strong>Informational with tool need:</strong> "What percentile is 95 in CAT" — answer requires a calculator, keeps user engaged</li>
+      <li><strong>Comparison &amp; planning:</strong> "Which IIT for CSE with 800 GATE score" — rank predictors, branch predictors</li>
+      <li><strong>Placement prep:</strong> "Aptitude questions", "TCS NQT syllabus 2025" — high volume, recurring</li>
+      <li><strong>Finance for students:</strong> "Education loan EMI calculator", "scholarship eligibility" — underserved segment</li>
+    </ul>
+  </div>
+
+  <h3>Why users return (retention drivers)</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+    <div class="metric-card">
+      <div class="metric-label">Semester cycle</div>
+      <div class="metric-value" style="font-size:15px; margin-top:4px;">Every 6 months</div>
+      <div class="metric-sub">CGPA, attendance recalc</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Exam season</div>
+      <div class="metric-value" style="font-size:15px; margin-top:4px;">Annual spikes</div>
+      <div class="metric-sub">GATE, CAT, JEE results</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Placement season</div>
+      <div class="metric-value" style="font-size:15px; margin-top:4px;">Aug–Jan</div>
+      <div class="metric-sub">Aptitude, resume tools</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Bookmarking</div>
+      <div class="metric-value" style="font-size:15px; margin-top:4px;">High rate</div>
+      <div class="metric-sub">Tools saved for repeat use</div>
+    </div>
+  </div>
+
+  <h3>Market dynamics in 2026</h3>
+  <p>Google's AI Overviews (formerly SGE) have reduced informational traffic for simple Q&amp;A. However, <strong>interactive tools are largely immune</strong> — Google cannot replicate a working calculator in an AI snippet. This is a structural advantage. Utility/calculator pages get clicks even when AI summaries appear because the user needs to interact, not just read.</p>
+  <div class="infobox">
+    <p>The shift to AI search actually <em>helps</em> utility sites. AI can answer "what is CGPA?" — but it can't be a CGPA calculator. Build tools, not articles.</p>
+  </div>
+</div>
+
+<!-- SECTION 2: COMPETITION -->
+<div class="section" id="section-competition">
+  <h2>2. Competitor Research</h2>
+  <p class="subtitle">Who you're up against, their weaknesses, and your entry points.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Competitor</th>
+        <th>Main features</th>
+        <th>Traffic est.</th>
+        <th>Weaknesses</th>
+        <th>Your opportunity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>GradeUp / PW</strong><br><span style="font-size:11px;color:var(--color-text-tertiary)">byjus.com, pw.live</span></td>
+        <td>Courses, tests, CGPA/rank tools buried inside app</td>
+        <td><span class="badge badge-red">50M+ mo</span></td>
+        <td>App-first, slow web, tools not the core product, bloated UI</td>
+        <td>Fast, focused web tools with no app wall</td>
+      </tr>
+      <tr>
+        <td><strong>Geeksforgeeks</strong></td>
+        <td>CS content, some calculators, placement prep</td>
+        <td><span class="badge badge-red">30M+ mo</span></td>
+        <td>Overloaded with ads, slow, not student-life focused</td>
+        <td>Student-life tools (CGPA, attendance) they don't cover well</td>
+      </tr>
+      <tr>
+        <td><strong>Yocket / Shiksha</strong></td>
+        <td>College discovery, GPA conversion</td>
+        <td><span class="badge badge-amber">5M+ mo</span></td>
+        <td>Focused on admissions only, not daily utility</td>
+        <td>Day-to-day student tools, not just admissions</td>
+      </tr>
+      <tr>
+        <td><strong>CollegeDunia</strong></td>
+        <td>Rankings, cutoffs, reviews</td>
+        <td><span class="badge badge-amber">3M+ mo</span></td>
+        <td>No interactive tools; content-only</td>
+        <td>Interactive rank predictors and calculators</td>
+      </tr>
+      <tr>
+        <td><strong>CampusVarta / similar</strong></td>
+        <td>Attendance calculators, CGPA tools</td>
+        <td><span class="badge badge-green">200K mo</span></td>
+        <td>Poor UX, outdated design, no SEO optimization, no mobile polish</td>
+        <td>Direct competition — better UX wins here</td>
+      </tr>
+      <tr>
+        <td><strong>Calculator.net</strong></td>
+        <td>Generic calculators</td>
+        <td><span class="badge badge-red">40M+ mo</span></td>
+        <td>Not India-specific, no student context (CGPA scales, VTU rules)</td>
+        <td>India-specific calculators with university context</td>
+      </tr>
+      <tr>
+        <td><strong>Indiabix</strong></td>
+        <td>Aptitude questions, placement prep</td>
+        <td><span class="badge badge-amber">4M+ mo</span></td>
+        <td>Outdated UI, no calculators, no personalization</td>
+        <td>Modern aptitude tools + calculators</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Key insight: the gap is in tool quality, not tool existence</h3>
+  <div class="card">
+    <p style="margin:0">Most competitors offer similar tools but with terrible UX: slow pages, excessive ads, no mobile optimization, and no India-specific context (e.g., university-specific CGPA scales, VTU/Anna University rules). A fast, clean, India-aware tool suite will win on user experience even against established players with massive traffic.</p>
+  </div>
+
+  <h3>What to copy</h3>
+  <ul class="list-items">
+    <li>GFG's breadth of placement-prep content (but make it interactive)</li>
+    <li>Calculator.net's URL structure: /cgpa-calculator, /attendance-calculator — clean, keyword-rich</li>
+    <li>Yocket's clean UI patterns</li>
+  </ul>
+
+  <h3>What to avoid</h3>
+  <ul class="list-items">
+    <li>Heavy interstitial ads before tool loads (kills UX and time-on-page)</li>
+    <li>Requiring account/login to use basic calculators</li>
+    <li>Generic calculators with no Indian education system context</li>
+    <li>Bloated JS bundles — most Indian students are on mid-range Android devices</li>
+  </ul>
+</div>
+
+<!-- SECTION 3: SEO -->
+<div class="section" id="section-seo">
+  <h2>3. SEO Opportunity Analysis</h2>
+  <p class="subtitle">High-value keywords for India's student market — prioritized by intent, difficulty, and realistic traffic.</p>
+
+  <div class="infobox">
+    <p>Focus on navigational + transactional intent keywords. Informational keywords ("what is CGPA") are being eaten by AI Overviews. Tool-intent keywords ("CGPA calculator") remain sticky and click-through rates stay high because the user must interact.</p>
+  </div>
+
+  <h3>Tier 1 — High volume, medium difficulty (win within 6–12 months)</h3>
+  <div class="kw-row kw-head">
+    <div>Keyword</div><div style="text-align:center">Vol/mo</div><div style="text-align:center">KD</div><div style="text-align:center">Intent</div>
+  </div>
+  <div class="kw-row"><div><div class="kw-name">CGPA calculator</div><div style="font-size:11px;color:var(--color-text-tertiary)">India + variations</div></div><div class="kw-meta">90K+</div><div class="kw-meta"><span class="badge badge-amber">Med</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">attendance calculator</div><div style="font-size:11px;color:var(--color-text-tertiary)">college bunk calculator</div></div><div class="kw-meta">60K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">percentage to CGPA</div><div style="font-size:11px;color:var(--color-text-tertiary)">cgpa to percentage</div></div><div class="kw-meta">50K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">GATE rank predictor</div><div style="font-size:11px;color:var(--color-text-tertiary)">2025 / 2026</div></div><div class="kw-meta">40K+</div><div class="kw-meta"><span class="badge badge-amber">Med</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">CAT percentile calculator</div><div style="font-size:11px;color:var(--color-text-tertiary)">score to percentile</div></div><div class="kw-meta">35K+</div><div class="kw-meta"><span class="badge badge-amber">Med</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">SPI to CPI converter</div><div style="font-size:11px;color:var(--color-text-tertiary)">IIT CGPA scale</div></div><div class="kw-meta">20K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">GPA to percentage India</div></div><div class="kw-meta">30K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+
+  <h3 style="margin-top:20px">Tier 2 — Medium volume, low difficulty (win within 3–6 months)</h3>
+  <div class="kw-row kw-head">
+    <div>Keyword</div><div style="text-align:center">Vol/mo</div><div style="text-align:center">KD</div><div style="text-align:center">Intent</div>
+  </div>
+  <div class="kw-row"><div><div class="kw-name">how many classes can I miss</div></div><div class="kw-meta">15K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">VTU CGPA calculator</div></div><div class="kw-meta">12K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">marks required to pass calculator</div></div><div class="kw-meta">10K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">TCS NQT score calculator</div></div><div class="kw-meta">8K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">education loan EMI calculator India</div></div><div class="kw-meta">8K+</div><div class="kw-meta"><span class="badge badge-amber">Med</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">study time calculator</div></div><div class="kw-meta">6K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">internship stipend calculator</div></div><div class="kw-meta">5K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+
+  <h3 style="margin-top:20px">Tier 3 — Long-tail (win within 1–3 months, compound over time)</h3>
+  <div class="kw-row kw-head">
+    <div>Keyword</div><div style="text-align:center">Vol/mo</div><div style="text-align:center">KD</div><div style="text-align:center">Intent</div>
+  </div>
+  <div class="kw-row"><div><div class="kw-name">how to calculate CGPA from marks in Anna University</div></div><div class="kw-meta">2K+</div><div class="kw-meta"><span class="badge badge-green">Very Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">how many marks needed to clear backlog</div></div><div class="kw-meta">3K+</div><div class="kw-meta"><span class="badge badge-green">Very Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">GATE 2026 rank vs college predictor CSE</div></div><div class="kw-meta">4K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">pomodoro timer for students</div></div><div class="kw-meta">3K+</div><div class="kw-meta"><span class="badge badge-green">Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+  <div class="kw-row"><div><div class="kw-name">scholarship amount calculator India</div></div><div class="kw-meta">2K+</div><div class="kw-meta"><span class="badge badge-green">Very Low</span></div><div class="kw-meta"><span class="badge badge-green">Tool</span></div></div>
+
+  <div class="card" style="margin-top:16px">
+    <h4>2026 SEO reality check</h4>
+    <ul class="list-items">
+      <li>Google's Helpful Content system rewards depth + specificity. One excellent calculator beats ten thin ones.</li>
+      <li>Core Web Vitals (LCP &lt;2.5s, CLS &lt;0.1) are ranking signals — Next.js + Vercel is an excellent choice here.</li>
+      <li>AI Overviews skip pages that are primarily tools/interactive — you're protected.</li>
+      <li>Structured data (FAQ, HowTo, Calculator schema) increases rich snippet eligibility.</li>
+      <li>India-specific long-tail is massively underserved. "VTU CGPA calculator" has almost no quality competitors.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SECTION 4: MVP -->
+<div class="section" id="section-mvp">
+  <h2>4. MVP Definition</h2>
+  <p class="subtitle">The smallest version of StudentTools.in that can rank, attract users, and qualify for AdSense.</p>
+
+  <div class="infobox">
+    <p>Launch with 5 tools, not 50. Depth over breadth. Each tool should be the best version of that tool on the Indian internet.</p>
+  </div>
+
+  <h3>The 5 MVP tools (launch in this order)</h3>
+
+  <div class="final-tool">
+    <div class="final-tool-num">01</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">CGPA Calculator</div>
+      <div class="final-tool-reason">Highest search volume in the student utility space. Supports multiple grading scales (10-point, 4-point, VTU, Anna University, SPPU). Includes GPA ↔ percentage converter, semester-wise tracker. This single tool can drive 20K+ monthly visits.</div>
+      <div class="final-tool-badges">
+        <span class="badge badge-green">Dev: Easy</span>
+        <span class="badge badge-green">SEO: Very High</span>
+        <span class="badge badge-green">Revenue: High</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">02</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">Attendance Calculator</div>
+      <div class="final-tool-reason">The "how many classes can I bunk" problem is universal. Every college student needs this every semester. Solves for both "how many I can miss" and "can I still reach 75%?" — two distinct search intents. Extremely easy to build.</div>
+      <div class="final-tool-badges">
+        <span class="badge badge-green">Dev: Very Easy</span>
+        <span class="badge badge-green">SEO: Very High</span>
+        <span class="badge badge-green">Revenue: High</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">03</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">Marks / Percentage Calculator</div>
+      <div class="final-tool-reason">Calculate percentage from marks, marks needed to pass, aggregate score across subjects. Multiple variations serve different search queries. Build once, rank for 10+ keyword variations. Complements the CGPA calculator with internal linking.</div>
+      <div class="final-tool-badges">
+        <span class="badge badge-green">Dev: Very Easy</span>
+        <span class="badge badge-green">SEO: High</span>
+        <span class="badge badge-green">Revenue: Med-High</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">04</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">GATE Rank Predictor</div>
+      <div class="final-tool-reason">High-intent seasonal tool with massive search volume (Aug–Mar spike). Uses publicly available GATE score vs rank data. Once built it just needs yearly data updates. Creates a high-authority page that brings in engineers who then discover other tools.</div>
+      <div class="final-tool-badges">
+        <span class="badge badge-amber">Dev: Medium</span>
+        <span class="badge badge-red">SEO: High (seasonal)</span>
+        <span class="badge badge-green">Revenue: High (seasonal)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">05</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">Pomodoro / Study Timer</div>
+      <div class="final-tool-reason">Recurring daily usage. Students bookmark and return. Low competition from India-focused sites. Creates direct traffic and session depth. Simple to build with vanilla JS. Good internal linking target from CGPA/attendance calculators ("study more effectively").</div>
+      <div class="final-tool-badges">
+        <span class="badge badge-green">Dev: Easy</span>
+        <span class="badge badge-amber">SEO: Medium</span>
+        <span class="badge badge-green">Revenue: Med (daily usage)</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>MVP supporting pages</h3>
+  <ul class="list-items">
+    <li>Homepage with tool cards, clear value prop, fast load</li>
+    <li>About page (needed for AdSense approval)</li>
+    <li>Contact page (needed for AdSense approval)</li>
+    <li>Privacy Policy (needed for AdSense)</li>
+    <li>Blog: 5 supporting articles — "How to calculate CGPA in VTU", "Minimum attendance rules in Indian colleges", etc.</li>
+  </ul>
+
+  <h3>MVP success metrics</h3>
+  <div class="card-grid">
+    <div class="metric-card"><div class="metric-label">Target: Month 3</div><div class="metric-value">2K</div><div class="metric-sub">monthly organic visitors</div></div>
+    <div class="metric-card"><div class="metric-label">Target: Month 6</div><div class="metric-value">10K</div><div class="metric-sub">monthly organic visitors</div></div>
+    <div class="metric-card"><div class="metric-label">AdSense apply</div><div class="metric-value">Month 2</div><div class="metric-sub">after 5 tools + 5 articles</div></div>
+    <div class="metric-card"><div class="metric-label">First revenue</div><div class="metric-value">Month 3–4</div><div class="metric-sub">₹500–2,000/mo initially</div></div>
+  </div>
+</div>
+
+<!-- SECTION 5: ROADMAP (100 tools) -->
+<div class="section" id="section-roadmap">
+  <h2>5. Tool Roadmap (100 Tools)</h2>
+  <p class="subtitle">Complete tool catalog organized by category. Filter and search below.</p>
+
+  <input class="search-box" type="text" id="toolSearch" placeholder="Search tools..." oninput="filterTools()">
+  <div id="tool-count"></div>
+  <div id="toolList"></div>
+</div>
+
+<!-- SECTION 6: ARCHITECTURE -->
+<div class="section" id="section-architecture">
+  <h2>6. Website Architecture</h2>
+  <p class="subtitle">Site structure, URL strategy, and internal linking designed for maximum SEO impact.</p>
+
+  <h3>URL structure</h3>
+  <div class="code-block">studenttools.in/
+├── /                          → Homepage (tool grid, categories)
+├── /tools/                    → All tools index
+│   ├── /cgpa-calculator       → CGPA Calculator
+│   ├── /attendance-calculator → Attendance Calculator
+│   ├── /percentage-calculator → Percentage / Marks Calculator
+│   ├── /gate-rank-predictor   → GATE Rank Predictor
+│   ├── /cat-percentile-calc   → CAT Percentile Calculator
+│   └── /pomodoro-timer        → Study Timer
+│
+├── /category/                 → Category index pages
+│   ├── /cgpa-tools            → All CGPA-related tools
+│   ├── /exam-tools            → GATE, CAT, JEE tools
+│   ├── /attendance            → Attendance tools
+│   ├── /placement             → Placement prep tools
+│   └── /study                → Study/productivity tools
+│
+├── /blog/                     → Supporting content
+│   ├── /how-to-calculate-cgpa-vtu
+│   ├── /attendance-rules-indian-colleges
+│   └── /gate-score-vs-rank-explained
+│
+└── /about, /contact, /privacy → Trust pages</div>
+
+  <h3>Internal linking strategy</h3>
+  <div class="card">
+    <h4>Hub → spoke model</h4>
+    <ul class="list-items">
+      <li>Homepage links to all category pages and top 6 tools</li>
+      <li>Each tool page links to 3 related tools ("also try") + 1 relevant blog post</li>
+      <li>Blog posts link to the tool they explain, plus 2 related tools</li>
+      <li>Category pages link to all tools in that category + cross-link to adjacent categories</li>
+      <li>CGPA Calculator → links to Attendance, Percentage, GPA converter (high PageRank tool shares authority)</li>
+    </ul>
+  </div>
+
+  <h3>Sitemap structure</h3>
+  <div class="code-block"><!-- sitemap.xml priorities -->
+Homepage:              priority 1.0, weekly
+Category pages:        priority 0.8, weekly
+Individual tools:      priority 0.9, monthly
+Blog articles:         priority 0.6, monthly
+About/Contact/Privacy: priority 0.3, yearly</div>
+
+  <h3>SEO architecture principles</h3>
+  <div class="card">
+    <ul class="list-items">
+      <li>Every tool page has a unique title: "CGPA Calculator — Convert CGPA to Percentage | StudentTools.in"</li>
+      <li>Meta descriptions include the primary action: "Calculate your CGPA instantly. Supports 10-point and 4-point scales. Works for VTU, Anna University, SPPU."</li>
+      <li>Each tool page includes a brief FAQ section (3–5 Q&amp;As) — targets featured snippets and long-tail queries</li>
+      <li>Structured data: SoftwareApplication schema on tool pages, FAQPage schema on FAQ sections</li>
+      <li>Canonical URLs set on all pages to prevent duplicate content from query parameters</li>
+      <li>Next.js Static Generation (SSG) for all tool pages — maximum Core Web Vitals scores</li>
+    </ul>
+  </div>
+
+  <h3>Category navigation</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+    <div class="metric-card"><div class="metric-label">CGPA Tools</div><div class="metric-value" style="font-size:15px;margin-top:4px;">8 tools</div></div>
+    <div class="metric-card"><div class="metric-label">Exam Tools</div><div class="metric-value" style="font-size:15px;margin-top:4px;">15 tools</div></div>
+    <div class="metric-card"><div class="metric-label">Attendance</div><div class="metric-value" style="font-size:15px;margin-top:4px;">5 tools</div></div>
+    <div class="metric-card"><div class="metric-label">Placement</div><div class="metric-value" style="font-size:15px;margin-top:4px;">14 tools</div></div>
+    <div class="metric-card"><div class="metric-label">Study</div><div class="metric-value" style="font-size:15px;margin-top:4px;">12 tools</div></div>
+    <div class="metric-card"><div class="metric-label">Finance</div><div class="metric-value" style="font-size:15px;margin-top:4px;">10 tools</div></div>
+  </div>
+</div>
+
+<!-- SECTION 7: TECH -->
+<div class="section" id="section-tech">
+  <h2>7. Technical Architecture</h2>
+  <p class="subtitle">Next.js + TypeScript folder structure, tool framework, and SEO implementation.</p>
+
+  <h3>Folder structure</h3>
+  <div class="code-block">studenttools/
+├── app/
+│   ├── layout.tsx              → Root layout (nav, footer, analytics)
+│   ├── page.tsx                → Homepage
+│   ├── tools/
+│   │   └── [slug]/
+│   │       └── page.tsx        → Dynamic tool route
+│   ├── category/
+│   │   └── [category]/
+│   │       └── page.tsx        → Category index
+│   └── blog/
+│       └── [slug]/
+│           └── page.tsx        → Blog post
+│
+├── components/
+│   ├── tools/                  → Tool UI components
+│   │   ├── CGPACalculator.tsx
+│   │   ├── AttendanceCalculator.tsx
+│   │   └── ...
+│   ├── layout/
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   └── Sidebar.tsx
+│   └── ui/                     → Shared UI (Button, Input, Card)
+│
+├── lib/
+│   ├── tools.ts                → Tool registry + metadata
+│   ├── calculations.ts         → Pure calculation functions
+│   └── seo.ts                  → SEO metadata generators
+│
+├── data/
+│   ├── tools.json              → Tool catalog
+│   ├── gate-data.json          → GATE rank/score tables
+│   └── cat-data.json           → CAT percentile data
+│
+└── public/
+    └── sitemap.xml             → Auto-generated</div>
+
+  <h3>Tool data structure</h3>
+  <div class="code-block">// lib/tools.ts
+interface Tool {
+  slug: string;           // URL: /tools/cgpa-calculator
+  title: string;          // H1 + SEO title
+  description: string;    // Meta description
+  category: ToolCategory;
+  component: string;      // React component name
+  keywords: string[];     // Target keywords
+  faqs: FAQ[];            // For structured data
+  relatedTools: string[]; // Internal links
+  priority: number;       // Build order
+}
+
+const TOOLS: Tool[] = [
+  {
+    slug: "cgpa-calculator",
+    title: "CGPA Calculator",
+    description: "Calculate CGPA from marks. Convert CGPA to percentage. Supports VTU, Anna University, 10-point and 4-point scales.",
+    category: "cgpa",
+    component: "CGPACalculator",
+    keywords: ["cgpa calculator", "cgpa to percentage", "gpa calculator india"],
+    relatedTools: ["attendance-calculator", "percentage-calculator"],
+    priority: 1,
+  }
+]</div>
+
+  <h3>SEO implementation pattern</h3>
+  <div class="code-block">// app/tools/[slug]/page.tsx
+export async function generateMetadata({ params }): Promise&lt;Metadata&gt; {
+  const tool = getToolBySlug(params.slug);
+  return {
+    title: `${tool.title} | StudentTools.in`,
+    description: tool.description,
+    openGraph: { title: tool.title, type: 'website' },
+  };
+}
+
+export function generateStaticParams() {
+  return TOOLS.map(t => ({ slug: t.slug })); // Full SSG
+}
+
+// JSON-LD structured data
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": tool.title,
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0" }
+};</div>
+
+  <h3>Performance strategy</h3>
+  <div class="card">
+    <ul class="list-items">
+      <li>All tool pages use SSG (generateStaticParams) — sub-100ms TTFB on Vercel edge network</li>
+      <li>Tool logic in pure TypeScript functions (no API calls) — works offline, zero latency</li>
+      <li>Tailwind CSS purged at build — minimal CSS bundle (&lt;10KB)</li>
+      <li>No heavy dependencies for calculators — vanilla React state only</li>
+      <li>Images: use Next.js Image component with WebP, sized at render dimensions</li>
+      <li>Target LCP &lt; 1.5s, CLS = 0, FID &lt; 50ms (achievable with SSG + Vercel)</li>
+    </ul>
+  </div>
+
+  <h3>Analytics implementation</h3>
+  <div class="code-block">// app/layout.tsx — GA4 + Vercel Analytics
+import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script';
+
+// Track tool-specific events
+trackEvent('tool_used', {
+  tool_name: 'cgpa_calculator',
+  cgpa_scale: '10_point',
+  result: cgpaValue
+});</div>
+</div>
+
+<!-- SECTION 8: ADSENSE -->
+<div class="section" id="section-adsense">
+  <h2>8. AdSense Strategy</h2>
+  <p class="subtitle">How to get approved, where to place ads, and realistic revenue projections.</p>
+
+  <h3>Approval requirements (2026 reality)</h3>
+  <div class="card">
+    <ul class="list-items">
+      <li>Minimum 15–25 pages of original content (5 tools + 5 blog posts is sufficient)</li>
+      <li>About, Contact, Privacy Policy pages mandatory</li>
+      <li>Domain must be at least 2–4 weeks old with some indexed pages</li>
+      <li>No copyright violations, no thin content, no scraped pages</li>
+      <li>Site must be mobile-friendly (Next.js + Tailwind handles this)</li>
+      <li>India approval timeline: typically 2–4 weeks after application</li>
+    </ul>
+  </div>
+
+  <div class="infobox">
+    <p>Apply at Month 2 once 5 tools and 5 supporting articles are live. Don't wait for traffic — Google approves based on content quality, not traffic volume.</p>
+  </div>
+
+  <h3>Ad placement strategy</h3>
+  <table>
+    <thead><tr><th>Position</th><th>Ad type</th><th>Notes</th><th>Revenue impact</th></tr></thead>
+    <tbody>
+      <tr><td>Below tool results (after calculation)</td><td>Display 728x90 / Responsive</td><td>High viewability — user just got their answer, natural pause</td><td><span class="badge badge-green">High</span></td></tr>
+      <tr><td>Sidebar (desktop only)</td><td>Display 300x250</td><td>Sticky sidebar next to tool. Good CTR on desktop.</td><td><span class="badge badge-green">High</span></td></tr>
+      <tr><td>Between FAQ items</td><td>In-article responsive</td><td>Natural content break. Good for mobile.</td><td><span class="badge badge-amber">Medium</span></td></tr>
+      <tr><td>End of related tools section</td><td>Display responsive</td><td>After user explores related links</td><td><span class="badge badge-amber">Medium</span></td></tr>
+      <tr><td>Above the fold / header</td><td>AVOID</td><td>Kills CLS score and hurts rankings. Never here.</td><td><span class="badge badge-red">Avoid</span></td></tr>
+      <tr><td>Interstitial / before tool loads</td><td>AVOID</td><td>User bounces before calculator renders.</td><td><span class="badge badge-red">Avoid</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>India AdSense benchmarks (2026)</h3>
+  <div class="card-grid">
+    <div class="metric-card"><div class="metric-label">India CPC (education)</div><div class="metric-value">₹3–15</div><div class="metric-sub">per click (avg ₹6)</div></div>
+    <div class="metric-card"><div class="metric-label">RPM (education niche)</div><div class="metric-value">₹40–120</div><div class="metric-sub">per 1,000 pageviews</div></div>
+    <div class="metric-card"><div class="metric-label">CTR (utility pages)</div><div class="metric-value">1–2.5%</div><div class="metric-sub">industry average</div></div>
+    <div class="metric-card"><div class="metric-label">Pages/session</div><div class="metric-value">1.8–2.5</div><div class="metric-sub">student tool sites</div></div>
+  </div>
+
+  <h3>Traffic → revenue projections (AdSense only)</h3>
+  <div class="revenue-row" style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-secondary)">
+    <div>Monthly visitors</div><div>Est. pageviews</div><div>RPM ₹60</div><div>Monthly ₹</div>
+  </div>
+  <div class="revenue-row"><div>1,000</div><div>1,800</div><div>₹108</div><div><span class="badge badge-gray">₹108</span></div></div>
+  <div class="revenue-row"><div>5,000</div><div>9,000</div><div>₹540</div><div><span class="badge badge-gray">₹540</span></div></div>
+  <div class="revenue-row"><div>10,000</div><div>18,000</div><div>₹1,080</div><div><span class="badge badge-amber">₹1,080</span></div></div>
+  <div class="revenue-row"><div>30,000</div><div>54,000</div><div>₹3,240</div><div><span class="badge badge-amber">₹3,240</span></div></div>
+  <div class="revenue-row"><div>50,000</div><div>90,000</div><div>₹5,400</div><div><span class="badge badge-green">₹5,400</span></div></div>
+  <div class="revenue-row"><div>100,000</div><div>180,000</div><div>₹10,800</div><div><span class="badge badge-green">₹10,800</span></div></div>
+
+  <p style="font-size:12px;color:var(--color-text-tertiary);margin-top:8px">RPM varies significantly by season (exam season = higher CPC), device mix, and ad unit optimization. These are conservative midpoints.</p>
+</div>
+
+<!-- SECTION 9: GROWTH -->
+<div class="section" id="section-growth">
+  <h2>9. Growth Strategy</h2>
+  <p class="subtitle">A realistic plan for a solo developer with a full-time job — weekends only.</p>
+
+  <h3>30-day plan (Launch)</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot done"></div>
+      <div class="timeline-label">Week 1</div>
+      <div class="timeline-title">Foundation</div>
+      <div class="timeline-body">Register domain, set up Next.js + Vercel. Build homepage + CGPA Calculator. Write Privacy Policy, About, Contact pages. Deploy and verify in Google Search Console.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot done"></div>
+      <div class="timeline-label">Week 2</div>
+      <div class="timeline-title">Core tools</div>
+      <div class="timeline-body">Build Attendance Calculator + Percentage Calculator. Write 2 supporting blog posts ("How to calculate CGPA", "Attendance rules in India"). Submit sitemap to GSC.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot current"></div>
+      <div class="timeline-label">Week 3</div>
+      <div class="timeline-title">SEO + AdSense prep</div>
+      <div class="timeline-body">Add FAQ sections to all tool pages. Add JSON-LD structured data. Write 3 more blog posts. Add internal linking. Optimize meta titles/descriptions. Apply for AdSense.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Week 4</div>
+      <div class="timeline-title">GATE predictor + polish</div>
+      <div class="timeline-body">Build GATE Rank Predictor. Add Pomodoro timer. Run Lighthouse audit, fix any Core Web Vitals issues. Share on r/Indians, engineering college WhatsApp groups, LinkedIn.</div>
+    </div>
+  </div>
+
+  <h3>90-day plan (Grow)</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Month 2</div>
+      <div class="timeline-title">CAT tools + first revenue</div>
+      <div class="timeline-body">Build CAT Percentile Calculator, IIM predictor. AdSense approval arrives. First ₹200–500. Build university-specific CGPA variants (VTU, Anna, SPPU). Share tools in college Telegram groups.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Month 3</div>
+      <div class="timeline-title">Placement tools</div>
+      <div class="timeline-body">TCS NQT calculator, aptitude practice mini-sets, resume score checker. First pages start ranking — target 2K monthly visitors. Revenue: ₹200–800/mo.</div>
+    </div>
+  </div>
+
+  <h3>1-year plan (Scale)</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Month 4–6</div>
+      <div class="timeline-title">Finance + AI tools</div>
+      <div class="timeline-body">Education loan EMI calculator, scholarship finder, stipend tracker. Add AI-powered tools (cover letter generator, SOP helper). Target: 10K monthly visitors. Revenue: ₹1,000–3,000/mo.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Month 7–9</div>
+      <div class="timeline-title">Authority building</div>
+      <div class="timeline-body">Reach 30–40 tools. Start building backlinks via HARO/journalist requests for education data. Guest posts on engineering college blogs. Target: 30K monthly visitors. Revenue: ₹3,000–6,000/mo.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Month 10–12</div>
+      <div class="timeline-title">Monetization diversification</div>
+      <div class="timeline-body">Add affiliate links for EdTech courses, books. Explore sponsored placement prep content. Target: 50K monthly visitors. Revenue: ₹6,000–15,000/mo (AdSense + affiliates).</div>
+    </div>
+  </div>
+
+  <h3>Promotion channels (free)</h3>
+  <div class="card">
+    <ul class="list-items">
+      <li>Engineering college subreddits (r/indianstudents, r/engineers, branch-specific subs)</li>
+      <li>College Telegram groups — share the exact tool that solves their current problem</li>
+      <li>Quora answers — answer "how to calculate CGPA" with link to tool</li>
+      <li>LinkedIn posts as engineering alumni — gets picked up by students following you</li>
+      <li>Product Hunt India launch once you have 20+ tools</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SECTION 10: REVENUE -->
+<div class="section" id="section-revenue">
+  <h2>10. Revenue Model</h2>
+  <p class="subtitle">Realistic income projections across traffic milestones with multiple revenue streams.</p>
+
+  <h3>Revenue streams</h3>
+
+  <table>
+    <thead><tr><th>Stream</th><th>When to activate</th><th>Revenue potential</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Google AdSense</strong></td><td>Month 2 (apply Month 1)</td><td>₹40–120 RPM</td><td><span class="badge badge-green">Low</span></td></tr>
+      <tr><td><strong>Affiliate — EdTech</strong><br><span style="font-size:11px;color:var(--color-text-tertiary)">GATE Academy, Unacademy, Testbook</span></td><td>Month 5–6</td><td>₹500–2,000 per sale</td><td><span class="badge badge-amber">Medium</span></td></tr>
+      <tr><td><strong>Affiliate — Books</strong><br><span style="font-size:11px;color:var(--color-text-tertiary)">Amazon affiliate program</span></td><td>Month 4</td><td>₹50–200 per sale</td><td><span class="badge badge-green">Low</span></td></tr>
+      <tr><td><strong>Sponsored content</strong><br><span style="font-size:11px;color:var(--color-text-tertiary)">EdTech brand articles</span></td><td>Month 8+</td><td>₹5,000–20,000 per post</td><td><span class="badge badge-amber">Medium</span></td></tr>
+      <tr><td><strong>Premium tool access</strong><br><span style="font-size:11px;color:var(--color-text-tertiary)">Ad-free + advanced features</span></td><td>Month 12+</td><td>₹99–199/mo per user</td><td><span class="badge badge-red">High</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Revenue at each traffic milestone</h3>
+
+  <div class="card" style="margin-bottom:12px">
+    <h4>1,000 monthly visitors</h4>
+    <div class="card-grid">
+      <div class="metric-card"><div class="metric-label">AdSense</div><div class="metric-value">₹110</div></div>
+      <div class="metric-card"><div class="metric-label">Affiliate</div><div class="metric-value">₹0–50</div></div>
+      <div class="metric-card"><div class="metric-label">Total/month</div><div class="metric-value">~₹150</div></div>
+    </div>
+    <p style="font-size:12px;margin:0;color:var(--color-text-tertiary)">Too early for meaningful revenue. Focus on building tools and content.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <h4>10,000 monthly visitors</h4>
+    <div class="card-grid">
+      <div class="metric-card"><div class="metric-label">AdSense</div><div class="metric-value">₹1,080</div></div>
+      <div class="metric-card"><div class="metric-label">Affiliate</div><div class="metric-value">₹300–800</div></div>
+      <div class="metric-card"><div class="metric-label">Total/month</div><div class="metric-value">~₹1,500</div></div>
+    </div>
+    <p style="font-size:12px;margin:0;color:var(--color-text-tertiary)">First meaningful revenue. Covers domain + hosting with profit. Validates the model.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <h4>50,000 monthly visitors</h4>
+    <div class="card-grid">
+      <div class="metric-card"><div class="metric-label">AdSense</div><div class="metric-value">₹5,400</div></div>
+      <div class="metric-card"><div class="metric-label">Affiliate</div><div class="metric-value">₹1,500–4,000</div></div>
+      <div class="metric-card"><div class="metric-label">Sponsored</div><div class="metric-value">₹0–5,000</div></div>
+      <div class="metric-card"><div class="metric-label">Total/month</div><div class="metric-value">~₹8,000</div></div>
+    </div>
+    <p style="font-size:12px;margin:0;color:var(--color-text-tertiary)">Goal achieved. Hits ₹1K–10K/mo target range. Achievable by month 9–12.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <h4>100,000 monthly visitors</h4>
+    <div class="card-grid">
+      <div class="metric-card"><div class="metric-label">AdSense</div><div class="metric-value">₹10,800</div></div>
+      <div class="metric-card"><div class="metric-label">Affiliate</div><div class="metric-value">₹3,000–8,000</div></div>
+      <div class="metric-card"><div class="metric-label">Sponsored</div><div class="metric-value">₹5,000–15,000</div></div>
+      <div class="metric-card"><div class="metric-label">Total/month</div><div class="metric-value">~₹20,000+</div></div>
+    </div>
+    <p style="font-size:12px;margin:0;color:var(--color-text-tertiary)">This is your ceiling target for year 1–2. At this point, premium tools/membership becomes worth building.</p>
+  </div>
+</div>
+
+<!-- SECTION 11: RISKS -->
+<div class="section" id="section-risks">
+  <h2>11. Risk Analysis</h2>
+  <p class="subtitle">Honest assessment of what can go wrong — and how to mitigate it.</p>
+
+  <h3>SEO risks</h3>
+  <div class="risk-card risk-high">
+    <div class="risk-title">Google algorithm update tanks rankings</div>
+    <div class="risk-body"><strong>Probability:</strong> Medium | <strong>Impact:</strong> High<br>
+    <strong>Mitigation:</strong> Focus on genuine user utility (real tools, not thin pages). Maintain good E-E-A-T signals: About page with real person details, accurate information, regular updates. Multiple tool pages mean one update rarely kills all traffic.</div>
+  </div>
+  <div class="risk-card risk-high">
+    <div class="risk-title">AI Overviews expand to cover utility tools</div>
+    <div class="risk-body"><strong>Probability:</strong> Low-Medium | <strong>Impact:</strong> High<br>
+    <strong>Mitigation:</strong> Interactive tools cannot be replaced by AI snippets — users must interact. Pure informational pages are vulnerable; tools are not. This structural advantage is central to the whole thesis.</div>
+  </div>
+  <div class="risk-card risk-med">
+    <div class="risk-title">Competitor builds identical site with more resources</div>
+    <div class="risk-body"><strong>Probability:</strong> Medium | <strong>Impact:</strong> Medium<br>
+    <strong>Mitigation:</strong> Speed matters — get indexed and ranking first. First-mover on India-specific tool variants (VTU, Anna University specific pages) creates long-tail moat that's expensive to replicate. Focus on quality not quantity.</div>
+  </div>
+
+  <h3>AdSense risks</h3>
+  <div class="risk-card risk-high">
+    <div class="risk-title">AdSense account suspended</div>
+    <div class="risk-body"><strong>Probability:</strong> Low | <strong>Impact:</strong> Very High<br>
+    <strong>Mitigation:</strong> Never click your own ads. Do not drive bot traffic. Monitor for invalid click sources. Diversify revenue — don't depend 100% on AdSense. Keep affiliate income growing in parallel.</div>
+  </div>
+  <div class="risk-card risk-med">
+    <div class="risk-title">AdSense application rejected</div>
+    <div class="risk-body"><strong>Probability:</strong> Low-Medium | <strong>Impact:</strong> Low<br>
+    <strong>Mitigation:</strong> Ensure 15+ quality pages before applying. Common rejection reasons: thin content, missing privacy/about pages, navigation issues. Fix and reapply. Alternative: Media.net as backup network.</div>
+  </div>
+
+  <h3>Competition risks</h3>
+  <div class="risk-card risk-med">
+    <div class="risk-title">GFG or similar large player builds a comprehensive student tools section</div>
+    <div class="risk-body"><strong>Probability:</strong> Medium | <strong>Impact:</strong> Medium<br>
+    <strong>Mitigation:</strong> Large sites move slowly and rarely optimize for long-tail India-specific variants. Your advantage: specialized domain, faster iteration, no legacy tech debt. Being #1 for "VTU CGPA calculator" is more valuable than being #5 for "CGPA calculator".</div>
+  </div>
+
+  <h3>Operational risks</h3>
+  <div class="risk-card risk-low">
+    <div class="risk-title">Burnout from maintaining alongside full-time job</div>
+    <div class="risk-body"><strong>Probability:</strong> High | <strong>Impact:</strong> Project-ending<br>
+    <strong>Mitigation:</strong> Build lean architecture that requires minimal maintenance. Set a time budget: 5–8 hours/week max. Don't build features that require databases or user accounts in Year 1. Static tools = nearly zero maintenance.</div>
+  </div>
+  <div class="risk-card risk-low">
+    <div class="risk-title">Vercel costs spike with traffic</div>
+    <div class="risk-body"><strong>Probability:</strong> Low | <strong>Impact:</strong> Low<br>
+    <strong>Mitigation:</strong> SSG + static tools have minimal compute costs. At 100K monthly visitors, Vercel Pro (~$20/mo) is trivially covered by AdSense. Zero-config CDN means no scaling issues.</div>
+  </div>
+</div>
+
+<!-- SECTION 12: FINAL RECOMMENDATION -->
+<div class="section" id="section-final">
+  <h2>12. Final Recommendation</h2>
+  <p class="subtitle">If I had your exact constraints — full-time job, limited time, strong engineering skills — here is exactly what I'd do.</p>
+
+  <div class="infobox">
+    <p><strong>Yes, build StudentTools.in.</strong> The Indian student utility market is underserved, the keyword opportunity is real, and interactive tools are structurally protected from AI search disruption. The risk/reward ratio is excellent for a solo developer.</p>
+  </div>
+
+  <h3>The exact build order</h3>
+
+  <div class="final-tool">
+    <div class="final-tool-num">1</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">CGPA Calculator — Week 1</div>
+      <div class="final-tool-reason">Highest search volume, easiest to build, most universally needed. Make it excellent: support 10-point, 4-point, VTU, Anna University, SPPU scales. Add GPA ↔ percentage converter. This one page can drive 20K+ monthly visits.</div>
+      <div class="final-tool-badges"><span class="badge badge-green">4–6 hrs to build</span><span class="badge badge-green">90K searches/mo</span></div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">2</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">Attendance Calculator — Week 1</div>
+      <div class="final-tool-reason">Possibly the most universally needed student tool in India. Build two modes: "How many classes can I miss?" and "Can I still reach 75%?". Should take 2–3 hours max.</div>
+      <div class="final-tool-badges"><span class="badge badge-green">2–3 hrs to build</span><span class="badge badge-green">60K searches/mo</span></div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">3</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">3 supporting blog posts — Week 2</div>
+      <div class="final-tool-reason">Required for AdSense approval AND helps the calculator pages rank. Write: "How to calculate CGPA in VTU", "Minimum attendance rules in Indian colleges", "CGPA vs Percentage — which matters for placements". These pages create internal links and long-tail traffic.</div>
+      <div class="final-tool-badges"><span class="badge badge-amber">4–5 hrs to write</span><span class="badge badge-green">AdSense unlock</span></div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">4</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">Apply for AdSense — End of Week 2</div>
+      <div class="final-tool-reason">Don't wait for traffic. Apply as soon as you have 5 good pages. Approval takes 2–4 weeks. Even if rejected, you'll get specific feedback on what to fix.</div>
+      <div class="final-tool-badges"><span class="badge badge-blue">30 min to apply</span></div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">5</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">Percentage / Marks Calculator — Week 2</div>
+      <div class="final-tool-reason">Complements CGPA calculator perfectly. Internal linking between these two creates a strong topic cluster. Three modes: marks → percentage, percentage → marks, marks needed to pass. Very easy to build.</div>
+      <div class="final-tool-badges"><span class="badge badge-green">2 hrs to build</span><span class="badge badge-green">50K searches/mo</span></div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">6</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">GATE Rank Predictor — Week 3</div>
+      <div class="final-tool-reason">The single tool with the highest authority-building potential. Engineers share this widely during results season. Data is publicly available from IITs. Build it once, update yearly. Creates a powerful acquisition funnel for engineers who then use your CGPA tools.</div>
+      <div class="final-tool-badges"><span class="badge badge-amber">8–10 hrs to build</span><span class="badge badge-green">Seasonal 40K+</span></div>
+    </div>
+  </div>
+
+  <div class="final-tool">
+    <div class="final-tool-num">7</div>
+    <div class="final-tool-info">
+      <div class="final-tool-name">CAT Percentile Calculator — Week 4</div>
+      <div class="final-tool-reason">Captures a different high-value segment (MBA aspirants). The CAT community is active on Reddit, WhatsApp groups, and Telegram. One well-built CAT tool can drive significant referral traffic from these communities.</div>
+      <div class="final-tool-badges"><span class="badge badge-amber">6–8 hrs to build</span><span class="badge badge-green">35K searches/mo</span></div>
+    </div>
+  </div>
+
+  <h3>The brutally practical mindset</h3>
+  <div class="card">
+    <ul class="list-items">
+      <li><strong>Quality over quantity.</strong> 5 excellent tools will outrank 20 mediocre ones. Build each tool to be the single best version of it on the Indian internet.</li>
+      <li><strong>SEO is the only marketing channel you need.</strong> Forget social media, paid ads, email lists. Get the calculators ranking. The traffic will compound automatically.</li>
+      <li><strong>Don't touch databases.</strong> Every tool must be frontend-only (TypeScript + React state). The moment you add a backend, you've multiplied maintenance by 10x.</li>
+      <li><strong>Time budget: 5 hours/weekend maximum.</strong> This is sustainable alongside a full-time job. Anything more leads to burnout. The beauty of SSG: once built and ranking, the tool requires zero maintenance.</li>
+      <li><strong>Your goal is 50,000 visitors/month, not 1 million.</strong> At 50K visitors, you hit ₹6,000–10,000/month. That's the target. Don't over-engineer for scale you don't have yet.</li>
+      <li><strong>First check: ~Month 5–6.</strong> Set that expectation. The first 3 months are building. Month 4 is ranking. Month 5–6 is the first real revenue check. This is not a get-rich-quick project.</li>
+    </ul>
+  </div>
+
+  <h3>Realistic 12-month trajectory</h3>
+  <div class="card-grid">
+    <div class="metric-card"><div class="metric-label">Month 1–2</div><div class="metric-value">0</div><div class="metric-sub">Revenue. Building + indexing.</div></div>
+    <div class="metric-card"><div class="metric-label">Month 3–4</div><div class="metric-value">₹200–600</div><div class="metric-sub">First checks. Proof it works.</div></div>
+    <div class="metric-card"><div class="metric-label">Month 5–7</div><div class="metric-value">₹1,000–3,000</div><div class="metric-sub">Goal range hit. Growing.</div></div>
+    <div class="metric-card"><div class="metric-label">Month 8–12</div><div class="metric-value">₹4,000–12,000</div><div class="metric-sub">Target achieved. Scale phase.</div></div>
+  </div>
+
+  <div class="infobox" style="margin-top:20px">
+    <p><strong>The core bet:</strong> Students in India search for the same tools every semester, forever. Build excellent tools. Get them ranking. The traffic and revenue will follow. This is one of the most proven playbooks in indie web development — and the Indian student market is years behind where Western markets are. The opportunity window is now.</p>
+  </div>
+</div>
+
+<script>
+const TOOLS_DATA = [
+  { cat: "CGPA Tools", name: "CGPA Calculator", desc: "10-point, 4-point, VTU, SPPU scales", diff: "Easy", traffic: "Very High", score: 98 },
+  { cat: "CGPA Tools", name: "GPA to Percentage Converter", desc: "Universal converter with multiple scales", diff: "Easy", traffic: "High", score: 90 },
+  { cat: "CGPA Tools", name: "Semester GPA Calculator", desc: "Individual semester GPA from subject grades", diff: "Easy", traffic: "High", score: 88 },
+  { cat: "CGPA Tools", name: "CGPA Improvement Calculator", desc: "Marks needed in future sems to reach target CGPA", diff: "Easy", traffic: "Med", score: 75 },
+  { cat: "CGPA Tools", name: "VTU CGPA Calculator", desc: "VTU-specific 10-point grading system", diff: "Easy", traffic: "High", score: 86 },
+  { cat: "CGPA Tools", name: "Anna University CGPA", desc: "AU-specific grade point calculator", diff: "Easy", traffic: "High", score: 84 },
+  { cat: "CGPA Tools", name: "IIT SPI to CPI Converter", desc: "Semester PI to Cumulative PI (IIT scale)", diff: "Easy", traffic: "Med", score: 72 },
+  { cat: "CGPA Tools", name: "CGPA to First Division Checker", desc: "Will you get distinction/first class?", diff: "Easy", traffic: "Med", score: 68 },
+
+  { cat: "Attendance Tools", name: "Attendance Calculator", desc: "How many classes can I miss? 75% rule.", diff: "Easy", traffic: "Very High", score: 97 },
+  { cat: "Attendance Tools", name: "Bunk Calculator", desc: "Classes I can skip and still stay eligible", diff: "Easy", traffic: "High", score: 90 },
+  { cat: "Attendance Tools", name: "Classes Needed to Reach 75%", desc: "How many consecutive classes to attend", diff: "Easy", traffic: "High", score: 85 },
+  { cat: "Attendance Tools", name: "Attendance Percentage Calculator", desc: "Current % from classes attended/total", diff: "Very Easy", traffic: "High", score: 88 },
+  { cat: "Attendance Tools", name: "Semester Attendance Tracker", desc: "Multi-subject attendance across semester", diff: "Med", traffic: "Med", score: 70 },
+
+  { cat: "Exam Tools", name: "GATE Rank Predictor", desc: "Score to rank using official GATE data", diff: "Med", traffic: "Very High", score: 96 },
+  { cat: "Exam Tools", name: "CAT Percentile Calculator", desc: "Scaled score to percentile conversion", diff: "Med", traffic: "Very High", score: 94 },
+  { cat: "Exam Tools", name: "JEE Rank Predictor", desc: "Marks to rank based on historical data", diff: "Med", traffic: "Very High", score: 92 },
+  { cat: "Exam Tools", name: "NEET Score Calculator", desc: "Raw marks to NEET score", diff: "Easy", traffic: "High", score: 85 },
+  { cat: "Exam Tools", name: "Marks Needed to Pass Calculator", desc: "Minimum marks for passing in final exam", diff: "Easy", traffic: "High", score: 86 },
+  { cat: "Exam Tools", name: "GATE Score Calculator", desc: "Marks to normalized GATE score", diff: "Med", traffic: "High", score: 88 },
+  { cat: "Exam Tools", name: "IIM Shortlist Predictor", desc: "CAT score + profile to IIM call chances", diff: "Hard", traffic: "High", score: 80 },
+  { cat: "Exam Tools", name: "Backlog Clearance Calculator", desc: "Marks required in supplementary to clear", diff: "Easy", traffic: "Med", score: 72 },
+  { cat: "Exam Tools", name: "Aggregate Score Calculator", desc: "Weighted average across multiple subjects", diff: "Easy", traffic: "Med", score: 74 },
+  { cat: "Exam Tools", name: "Rank to Percentile Converter", desc: "Engineering entrance rank to percentile", diff: "Easy", traffic: "Med", score: 70 },
+  { cat: "Exam Tools", name: "UPSC Prelims Score Calculator", desc: "Negative marking adjusted score", diff: "Easy", traffic: "High", score: 82 },
+  { cat: "Exam Tools", name: "GMAT Score Percentile", desc: "Score to percentile for MBA aspirants", diff: "Easy", traffic: "Med", score: 65 },
+  { cat: "Exam Tools", name: "GRE Score Comparison Tool", desc: "Compare GRE scores for US university cutoffs", diff: "Easy", traffic: "Med", score: 63 },
+  { cat: "Exam Tools", name: "CAT Mock Score Analyzer", desc: "Section-wise performance + percentile estimator", diff: "Med", traffic: "Med", score: 72 },
+  { cat: "Exam Tools", name: "Exam Countdown Timer", desc: "Days left to target exam with study plan", diff: "Easy", traffic: "Med", score: 68 },
+
+  { cat: "Placement Tools", name: "TCS NQT Score Calculator", desc: "Section-wise TCS NQT score computation", diff: "Easy", traffic: "High", score: 86 },
+  { cat: "Placement Tools", name: "Aptitude Test Timer", desc: "Timed mock aptitude practice", diff: "Med", traffic: "Med", score: 72 },
+  { cat: "Placement Tools", name: "Package / CTC Calculator", desc: "Break down CTC into take-home salary", diff: "Easy", traffic: "Very High", score: 90 },
+  { cat: "Placement Tools", name: "Infosys InfyTQ Score Check", desc: "Score estimation from InfyTQ results", diff: "Easy", traffic: "Med", score: 68 },
+  { cat: "Placement Tools", name: "Accenture Placement Test Prep", desc: "Practice cognitive + tech questions", diff: "Hard", traffic: "Med", score: 65 },
+  { cat: "Placement Tools", name: "Resume Score Checker", desc: "ATS score estimator for student resume", diff: "Hard", traffic: "Med", score: 70 },
+  { cat: "Placement Tools", name: "Coding Round Timer", desc: "Simulate timed online coding tests", diff: "Med", traffic: "Med", score: 68 },
+  { cat: "Placement Tools", name: "Interview Probability Estimator", desc: "Placement odds based on CGPA + branch + company", diff: "Hard", traffic: "Med", score: 65 },
+  { cat: "Placement Tools", name: "Salary Negotiation Calculator", desc: "Counteroffer strategy for freshers", diff: "Easy", traffic: "Med", score: 70 },
+  { cat: "Placement Tools", name: "Service Bond Calculator", desc: "Service bond amount and implications", diff: "Easy", traffic: "Med", score: 65 },
+  { cat: "Placement Tools", name: "Offer Letter Comparator", desc: "Compare multiple job offers on 10+ factors", diff: "Med", traffic: "Med", score: 72 },
+  { cat: "Placement Tools", name: "Notice Period Calculator", desc: "Calculate exit date from last working day", diff: "Very Easy", traffic: "High", score: 78 },
+  { cat: "Placement Tools", name: "Work Experience Calculator", desc: "Total experience from multiple jobs", diff: "Very Easy", traffic: "Med", score: 65 },
+  { cat: "Placement Tools", name: "Aptitude Question Generator", desc: "Random aptitude questions by difficulty", diff: "Med", traffic: "Med", score: 68 },
+
+  { cat: "Study Tools", name: "Pomodoro Timer", desc: "25-5 study timer with session tracking", diff: "Easy", traffic: "Med", score: 80 },
+  { cat: "Study Tools", name: "Study Plan Generator", desc: "Chapters to days with revision buffer", diff: "Med", traffic: "Med", score: 74 },
+  { cat: "Study Tools", name: "Note Summarizer (AI)", desc: "Paste notes, get summary + key points", diff: "Hard", traffic: "High", score: 82 },
+  { cat: "Study Tools", name: "Flashcard Generator (AI)", desc: "Generate Q&A cards from study material", diff: "Hard", traffic: "High", score: 80 },
+  { cat: "Study Tools", name: "Topic Reading Time Estimator", desc: "How long to read N pages at your speed", diff: "Easy", traffic: "Low", score: 55 },
+  { cat: "Study Tools", name: "Exam Prep Checklist", desc: "Subject-wise revision tracker", diff: "Easy", traffic: "Low", score: 58 },
+  { cat: "Study Tools", name: "Time Table Generator", desc: "Weekly study schedule from subjects + hours", diff: "Med", traffic: "Med", score: 70 },
+  { cat: "Study Tools", name: "Practice Question Timer", desc: "Self-assessment with difficulty tracking", diff: "Easy", traffic: "Low", score: 55 },
+  { cat: "Study Tools", name: "Mind Map Creator (basic)", desc: "Simple visual mind map for topic linking", diff: "Hard", traffic: "Med", score: 65 },
+  { cat: "Study Tools", name: "Past Paper Downloader (links)", desc: "Curated links to university past papers", diff: "Easy", traffic: "High", score: 76 },
+  { cat: "Study Tools", name: "Distraction Blocker Timer", desc: "Phone-free study commitment tracker", diff: "Easy", traffic: "Low", score: 52 },
+  { cat: "Study Tools", name: "Group Study Scheduler", desc: "Find common free slots from n timetables", diff: "Med", traffic: "Low", score: 55 },
+
+  { cat: "Productivity Tools", name: "Assignment Deadline Tracker", desc: "Multi-subject deadline manager", diff: "Med", traffic: "Med", score: 65 },
+  { cat: "Productivity Tools", name: "Semester Calendar Generator", desc: "Convert college calendar to Google Cal", diff: "Med", traffic: "Med", score: 68 },
+  { cat: "Productivity Tools", name: "Grade Goal Calculator", desc: "What marks needed in pending exams", diff: "Easy", traffic: "Med", score: 74 },
+  { cat: "Productivity Tools", name: "Project Deadline Calculator", desc: "Buffer days + milestone planner", diff: "Easy", traffic: "Med", score: 65 },
+  { cat: "Productivity Tools", name: "Citation Generator", desc: "APA/MLA/Chicago for student papers", diff: "Med", traffic: "High", score: 82 },
+  { cat: "Productivity Tools", name: "Word Count / Reading Time", desc: "Essay word count + estimated read time", diff: "Very Easy", traffic: "Med", score: 70 },
+  { cat: "Productivity Tools", name: "PDF Merge / Split (free)", desc: "Simple browser-based PDF tool", diff: "Easy", traffic: "Very High", score: 78 },
+  { cat: "Productivity Tools", name: "QR Code Generator", desc: "For sharing notes, links, study resources", diff: "Easy", traffic: "Med", score: 65 },
+  { cat: "Productivity Tools", name: "To-Do List (simple)", desc: "No login, localStorage based task list", diff: "Easy", traffic: "Med", score: 60 },
+
+  { cat: "Finance Tools", name: "Education Loan EMI Calculator", desc: "SBI, HDFC, Axis bank education loan EMI", diff: "Easy", traffic: "High", score: 88 },
+  { cat: "Finance Tools", name: "Scholarship Amount Estimator", desc: "Estimate scholarship by marks + category", diff: "Med", traffic: "Med", score: 72 },
+  { cat: "Finance Tools", name: "Internship Stipend Calculator", desc: "Stipend after TDS, transport, expenses", diff: "Easy", traffic: "Med", score: 74 },
+  { cat: "Finance Tools", name: "Hostel Fee vs Rent Comparator", desc: "College hostel vs PG/flat cost comparison", diff: "Easy", traffic: "Med", score: 68 },
+  { cat: "Finance Tools", name: "Student Budget Calculator", desc: "Monthly expense tracker for students", diff: "Easy", traffic: "Med", score: 70 },
+  { cat: "Finance Tools", name: "Book Cost Splitter", desc: "Split textbook costs among N students", diff: "Very Easy", traffic: "Low", score: 50 },
+  { cat: "Finance Tools", name: "NPS (Pension) for Student", desc: "Start early — NPS corpus calculator", diff: "Easy", traffic: "Low", score: 52 },
+  { cat: "Finance Tools", name: "Tax Calculator for Freshers", desc: "First salary tax estimation, old vs new regime", diff: "Med", traffic: "High", score: 82 },
+  { cat: "Finance Tools", name: "SIP Calculator for Students", desc: "SIP returns on ₹500–5000/mo investment", diff: "Easy", traffic: "Med", score: 72 },
+  { cat: "Finance Tools", name: "Study Abroad Cost Estimator", desc: "Total cost of studying in USA/Canada/UK/Germany", diff: "Med", traffic: "High", score: 80 },
+
+  { cat: "AI-Powered Tools", name: "SOP Generator (AI)", desc: "Statement of Purpose for MS/MBA applications", diff: "Hard", traffic: "High", score: 86 },
+  { cat: "AI-Powered Tools", name: "Cover Letter Generator (AI)", desc: "Personalized cover letter for campus jobs", diff: "Hard", traffic: "High", score: 84 },
+  { cat: "AI-Powered Tools", name: "Email to Professor Generator", desc: "Professional email for research/internship", diff: "Hard", traffic: "Med", score: 78 },
+  { cat: "AI-Powered Tools", name: "Resume Bullet Generator", desc: "Generate impact-driven resume bullets", diff: "Hard", traffic: "High", score: 82 },
+  { cat: "AI-Powered Tools", name: "LinkedIn Summary Generator", desc: "Student/fresher LinkedIn about section", diff: "Hard", traffic: "Med", score: 74 },
+  { cat: "AI-Powered Tools", name: "Interview Answer Helper", desc: "STAR-method answers for common HR questions", diff: "Hard", traffic: "Med", score: 76 },
+  { cat: "AI-Powered Tools", name: "Assignment Topic Suggester", desc: "10 topic ideas for any subject/assignment", diff: "Hard", traffic: "Med", score: 72 },
+  { cat: "AI-Powered Tools", name: "Doubt Explainer (AI)", desc: "Paste a problem, get step-by-step explanation", diff: "Hard", traffic: "Med", score: 75 },
+  { cat: "AI-Powered Tools", name: "Essay Checker (grammar + clarity)", desc: "Basic grammar + clarity check for essays", diff: "Hard", traffic: "Med", score: 70 },
+  { cat: "AI-Powered Tools", name: "Project Abstract Generator", desc: "Generate IEEE-style abstract from bullet points", diff: "Hard", traffic: "Med", score: 72 },
+];
+
+function getDiffBadge(d) {
+  const map = { "Very Easy": "badge-green", "Easy": "badge-green", "Med": "badge-amber", "Hard": "badge-red" };
+  return `<span class="badge ${map[d]||'badge-gray'}">${d}</span>`;
+}
+function getTrafficBadge(t) {
+  const map = { "Very High": "badge-green", "High": "badge-green", "Med": "badge-amber", "Low": "badge-gray" };
+  return `<span class="badge ${map[t]||'badge-gray'}">${t}</span>`;
+}
+function getScoreBar(s) {
+  const cls = s >= 80 ? 'high' : s >= 65 ? 'med' : 'low';
+  return `<div class="priority-bar"><div class="bar-track"><div class="bar-fill ${cls}" style="width:${s}%"></div></div><span style="font-size:11px;color:var(--color-text-tertiary);min-width:24px">${s}</span></div>`;
+}
+
+function renderTools(data) {
+  const cats = [...new Set(data.map(t => t.cat))];
+  let html = '';
+  cats.forEach(cat => {
+    const tools = data.filter(t => t.cat === cat);
+    if (!tools.length) return;
+    html += `<div class="tool-cat-header">${cat} (${tools.length})</div>`;
+    html += `<div style="display:grid;grid-template-columns:1fr 70px 70px 80px;gap:6px;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:2px"><div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em">Tool</div><div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;text-align:center">Difficulty</div><div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;text-align:center">Traffic</div><div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em">Priority</div></div>`;
+    tools.forEach(t => {
+      html += `<div style="display:grid;grid-template-columns:1fr 70px 70px 80px;gap:6px;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)">
+        <div><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${t.name}</div><div style="font-size:11px;color:var(--color-text-tertiary)">${t.desc}</div></div>
+        <div style="text-align:center">${getDiffBadge(t.diff)}</div>
+        <div style="text-align:center">${getTrafficBadge(t.traffic)}</div>
+        <div>${getScoreBar(t.score)}</div>
+      </div>`;
+    });
+  });
+  return html;
+}
+
+function filterTools() {
+  const q = document.getElementById('toolSearch').value.toLowerCase();
+  const filtered = TOOLS_DATA.filter(t =>
+    t.name.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) ||
+    t.diff.toLowerCase().includes(q) || t.traffic.toLowerCase().includes(q)
+  );
+  document.getElementById('toolList').innerHTML = renderTools(filtered);
+  document.getElementById('tool-count').textContent = `Showing ${filtered.length} of ${TOOLS_DATA.length} tools`;
+}
+
+filterTools();
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
