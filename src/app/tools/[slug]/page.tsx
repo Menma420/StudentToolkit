@@ -38,8 +38,26 @@ export default async function ToolPage({ params }: ToolPageProps) {
     'PercentageCalculator': <PercentageCalculator />,
   };
 
+  const howItWorksSteps: Record<string, string[]> = {
+    'cgpa-calculator': [
+      'Enter your subjects, credits, and grade points.',
+      'Select your grading scale or university format.',
+      'Get your weighted CGPA/GPA and percentage estimate instantly.'
+    ],
+    'attendance-calculator': [
+      'Enter classes attended and total classes held.',
+      'Set your target attendance percentage, such as 75%.',
+      'See your current attendance, how many classes you can miss, or how many you must attend.'
+    ],
+    'percentage-calculator': [
+      'Choose marks-to-percentage, percentage-to-marks, or aggregate mode.',
+      'Enter your marks, total marks, or subject-wise scores.',
+      'Get your percentage, required marks, or aggregate result instantly.'
+    ]
+  };
+
   return (
-    <ToolLayout tool={tool}>
+    <ToolLayout tool={tool} howItWorks={howItWorksSteps[slug]}>
       {components[tool.component] || <div className="p-12 text-center border rounded-xl bg-muted/20">This tool is coming soon.</div>}
     </ToolLayout>
   );

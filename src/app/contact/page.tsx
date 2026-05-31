@@ -17,8 +17,8 @@ export default function ContactPage() {
             <div className="space-y-1">
               <h3 className="font-bold text-lg">Email Us</h3>
               <p className="text-muted-foreground">For tool suggestions, bug reports, or partnership inquiries.</p>
-              <a 
-                href="mailto:contact@studenttoolkit.in" 
+              <a
+                href="mailto:contact@studenttoolkit.in"
                 className="text-primary font-semibold hover:underline block pt-2"
               >
                 contact@studenttoolkit.in
@@ -45,11 +45,11 @@ export default function ContactPage() {
           </div>
           <div className="prose prose-blue text-muted-foreground">
             <p>
-              StudentToolkit is currently an early-stage student utility project. 
-              Our mission is to build the fastest and most accurate academic toolkit for students in India. 
+              StudentToolkit is currently an early-stage student utility project.
+              Our mission is to build a simple, reliable academic toolkit for students in India.
             </p>
             <p>
-              If you find any calculation errors or have ideas for new tools (like Rank Predictors 
+              If you find any calculation errors or have ideas for new tools (like Rank Predictors
               or Study Timers), please don&apos;t hesitate to reach out!
             </p>
           </div>

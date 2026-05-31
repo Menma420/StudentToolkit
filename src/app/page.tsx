@@ -21,8 +21,8 @@ export default function HomePage() {
               Essential Tools for the <span className="text-primary">Ambitious Student</span>.
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Free tools for everyday academic calculations. India&apos;s fastest 
-              utility toolkit for CGPA, attendance, and marks tracking.
+              Free tools for everyday academic calculations. Provide simple 
+              utility for CGPA, attendance, and marks tracking.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link 

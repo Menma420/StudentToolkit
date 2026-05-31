@@ -5,9 +5,18 @@ import { ToolMeta } from '@/types/tool';
 interface ToolLayoutProps {
   tool: ToolMeta;
   children: ReactNode;
+  howItWorks?: string[];
 }
 
-export function ToolLayout({ tool, children }: ToolLayoutProps) {
+export function ToolLayout({ tool, children, howItWorks }: ToolLayoutProps) {
+  const defaultSteps = [
+    'Enter your subjects and grade points.',
+    'Select your academic grading scale.',
+    'Get your weighted CGPA/GPA results locally.'
+  ];
+
+  const steps = howItWorks || defaultSteps;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Breadcrumbs items={[
@@ -47,18 +56,12 @@ export function ToolLayout({ tool, children }: ToolLayoutProps) {
           <div className="rounded-xl border bg-card p-6 shadow-sm">
             <h3 className="font-semibold mb-4 text-foreground">How it works</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex gap-2">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">1</span>
-                Enter your subjects and grade points.
-              </li>
-              <li className="flex gap-2">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">2</span>
-                Select your academic grading scale.
-              </li>
-              <li className="flex gap-2">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">3</span>
-                Get instant CGPA/GPA results locally.
-              </li>
+              {steps.map((step, idx) => (
+                <li key={idx} className="flex gap-2">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">{idx + 1}</span>
+                  {step}
+                </li>
+              ))}
             </ul>
           </div>
           

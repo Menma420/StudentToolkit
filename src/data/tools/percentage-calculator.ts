@@ -4,7 +4,7 @@ export const percentageCalculatorMeta: ToolMeta = {
   slug: 'percentage-calculator',
   title: 'Percentage Calculator',
   shortDescription: 'Convert marks to percentage, find required marks for a target, or calculate aggregate scores.',
-  description: 'The definitive tool for all mark-related calculations. Easily convert your scores to percentages, determine what you need to score for your target percentage, or calculate overall aggregate marks across multiple subjects.',
+  description: 'A tool for all mark-related calculations. Easily convert your scores to percentages, determine what you need to score for your target percentage, or calculate overall aggregate marks across multiple subjects.',
   category: 'cgpa',
   component: 'PercentageCalculator',
   keywords: ['percentage calculator', 'marks to percentage', 'aggregate percentage calculator', 'calculate final marks'],

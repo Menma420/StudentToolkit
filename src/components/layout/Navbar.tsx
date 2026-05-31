@@ -18,11 +18,17 @@ export function Navbar() {
           <Link href="/tools/attendance-calculator" className="text-sm font-medium transition-colors hover:text-primary">
             Attendance
           </Link>
+          <Link href="/tools/percentage-calculator" className="text-sm font-medium transition-colors hover:text-primary">
+            Percentage
+          </Link>
+          <Link href="/about" className="text-sm font-medium transition-colors hover:text-primary">
+            About
+          </Link>
           <Link 
-            href="/about" 
+            href="/contact" 
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
           >
-            About
+            Contact
           </Link>
         </nav>
       </div>
