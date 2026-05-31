@@ -1,8 +1,8 @@
+import { getAllTools } from '@/lib/tools';
+import { ToolCard } from '@/components/tools/ToolCard';
+import { Calculator, Zap, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
-import { ToolCard } from '@/components/tools/ToolCard';
-import { getAllTools } from '@/lib/tools';
-import { Calculator, Zap, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function HomePage() {
@@ -75,26 +75,14 @@ export default function HomePage() {
       <section id="all-tools" className="container mx-auto px-4 scroll-mt-20">
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight mb-2">Popular Tools</h2>
-            <p className="text-muted-foreground">Simple calculators for CGPA, attendance, and marks tracking.</p>
+            <h2 className="text-3xl font-bold tracking-tight mb-2">Academic Toolkit</h2>
+            <p className="text-muted-foreground">Simple calculators for CGPA, attendance, and marks.</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {tools.map((tool) => (
             <ToolCard key={tool.slug} tool={tool} />
           ))}
-          
-          {/* Placeholders for upcoming tools */}
-          <div className="rounded-xl border border-dashed p-6 flex flex-col justify-center items-center text-center h-full min-h-[200px] opacity-60">
-            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center mb-4 text-xs font-bold">?</div>
-            <h3 className="font-semibold text-muted-foreground">Attendance Calculator</h3>
-            <p className="text-xs text-muted-foreground mt-1">Coming soon</p>
-          </div>
-          <div className="rounded-xl border border-dashed p-6 flex flex-col justify-center items-center text-center h-full min-h-[200px] opacity-60">
-            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center mb-4 text-xs font-bold">?</div>
-            <h3 className="font-semibold text-muted-foreground">GATE Rank Predictor</h3>
-            <p className="text-xs text-muted-foreground mt-1">Coming soon</p>
-          </div>
         </div>
       </section>
 

@@ -1,5 +1,7 @@
 import { ToolLayout } from '@/components/tools/ToolLayout';
 import CGPACalculator from '@/components/calculators/CGPACalculator';
+import AttendanceCalculator from '@/components/calculators/AttendanceCalculator';
+import PercentageCalculator from '@/components/calculators/PercentageCalculator';
 import { getToolBySlug } from '@/lib/tools';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
@@ -32,6 +34,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
   // Map component name to actual component
   const components: Record<string, React.ReactNode> = {
     'CGPACalculator': <CGPACalculator />,
+    'AttendanceCalculator': <AttendanceCalculator />,
+    'PercentageCalculator': <PercentageCalculator />,
   };
 
   return (
