@@ -10,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-primary">StudentToolkit.in</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Essential utility toolkit for Indian college students. Fast, free, and optimized for success.
+              Simple, free utility tools for Indian college students.
             </p>
           </div>
           <div>

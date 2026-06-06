@@ -92,7 +92,7 @@ export default function HomePage() {
           <div className="relative z-10 max-w-2xl mx-auto space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Ready to simplify your student life?</h2>
             <p className="text-lg md:text-xl opacity-90 leading-relaxed font-medium">
-              Join students who rely on StudentToolkit.in for their everyday academic calculations.
+              Start using simple academic tools for CGPA, attendance, and marks calculations.
             </p>
             <div className="pt-4">
               <Link 
