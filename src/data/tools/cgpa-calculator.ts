@@ -10,16 +10,24 @@ export const cgpaCalculatorMeta: ToolMeta = {
   keywords: ['cgpa calculator', 'vtucgpa calculator', 'anna university cgpa calculator', 'cgpa to percentage', 'gpa calculator', 'engineering cgpa calculator'],
   faqs: [
     {
-      question: 'How is VTU CGPA converted to percentage?',
-      answer: 'According to VTU regulations for 2015/2017/2018 schemes, the conversion formula is: Percentage = (CGPA - 0.75) × 10.'
+      question: 'What is CGPA?',
+      answer: 'Cumulative Grade Point Average (CGPA) is a grading system used in schools and colleges to measure the overall academic performance of a student. It is calculated as the weighted average of the grade points obtained in all subjects.'
     },
     {
-      question: 'How is Anna University CGPA converted to percentage?',
-      answer: 'As per Anna University regulations, the conversion formula is: Percentage = CGPA × 10.'
+      question: 'How is CGPA calculated in Indian universities?',
+      answer: 'CGPA is calculated by dividing the sum of the product of credits and grade points for all subjects by the total number of credits across all semesters. The formula is: CGPA = Σ(Credits × Grade Points) / Σ(Total Credits).'
     },
     {
-      question: 'How is standard Indian CGPA converted?',
-      answer: 'While it varies, the standard benchmark for most Indian universities is CGPA × 9.5.'
+      question: 'How do I convert CGPA to percentage?',
+      answer: 'The conversion formula varies by university. Many Indian universities use CGPA × 9.5. However, VTU uses (CGPA - 0.75) × 10, and Anna University uses CGPA × 10. Check our "Percentage vs CGPA" article for more details.'
+    },
+    {
+      question: 'Do university formulas vary for CGPA conversion?',
+      answer: 'Yes, conversion formulas are specific to the academic regulations of each university. While 9.5 is a common multiplier, many specific universities have their own regulatory formulas for placements and higher studies.'
+    },
+    {
+      question: 'Is SGPA different from CGPA?',
+      answer: 'Yes, SGPA (Semester Grade Point Average) refers to the grade point average of a single semester, while CGPA is the cumulative average across all semesters completed so far.'
     }
   ],
   relatedTools: ['attendance-calculator', 'percentage-calculator'],

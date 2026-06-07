@@ -1,6 +1,6 @@
 import { getAllTools } from '@/lib/tools';
 import { ToolCard } from '@/components/tools/ToolCard';
-import { Calculator, Zap, ShieldCheck } from 'lucide-react';
+import { Calculator, Zap, ShieldCheck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -83,6 +83,26 @@ export default function HomePage() {
           {tools.map((tool) => (
             <ToolCard key={tool.slug} tool={tool} />
           ))}
+        </div>
+      </section>
+
+      {/* Blog Teaser Section */}
+      <section className="container mx-auto px-4">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold">Latest Academic Guides</h2>
+          <Link href="/blog" className="text-sm font-bold text-primary flex items-center gap-1">
+            View All Blog Posts <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link href="/blog/how-to-calculate-cgpa-in-indian-colleges" className="p-6 rounded-2xl border bg-card hover:border-primary transition-all group">
+            <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">How to Calculate CGPA in Indian Colleges</h3>
+            <p className="text-sm text-muted-foreground">A step-by-step guide on weighted averages and credits.</p>
+          </Link>
+          <Link href="/blog/attendance-percentage-rules-indian-colleges" className="p-6 rounded-2xl border bg-card hover:border-primary transition-all group">
+            <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">Attendance Rules & 75% Criteria</h3>
+            <p className="text-sm text-muted-foreground">Everything you need to know about attendance maintenance.</p>
+          </Link>
         </div>
       </section>
 

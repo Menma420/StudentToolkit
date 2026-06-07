@@ -19,6 +19,7 @@ export function Footer() {
               <li><Link href="/tools/cgpa-calculator" className="hover:text-primary transition-colors">CGPA Calculator</Link></li>
               <li><Link href="/tools/attendance-calculator" className="hover:text-primary transition-colors">Attendance Calculator</Link></li>
               <li><Link href="/tools/percentage-calculator" className="hover:text-primary transition-colors">Percentage Calculator</Link></li>
+              <li><Link href="/blog" className="hover:text-primary transition-colors font-semibold">Academic Blog</Link></li>
             </ul>
           </div>
           <div>
